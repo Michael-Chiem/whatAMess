@@ -16,7 +16,7 @@ function start() {
             "Add a department",
             "Add a role",
             "Add Employee",
-            "Update a department"]
+            "Update a role"]
 
     }).then(
         answer => {
@@ -39,8 +39,8 @@ function start() {
                 case "Add Employee":
                         addEmployee();
                         break;    
-                case "Update a department":
-                    updateDepartment();
+                case "Update a role":
+                    updateEmployeeRole();
                     break;
                 default: return;
             }
@@ -158,37 +158,77 @@ function addEmployeeToDB(firstName, lastName, roleId, managerId) {
             viewAllEmployees();
             start();
         });
+
+
 }
 
-function updateDepartment() {
-    db.query("SELECT * FROM department", (err, res) => {
+
+function updateEmployeeRole() {
+    db.query("SELECT * FROM employee", (err, employees) => {
         if (err) throw err;
-        console.log(res);
-        //const departments = res.map(({ id, name }) => ({ name: name, value: id }));
-        //console.log(departments);
-
-        const departmentNames = res.map(({ name }) => name);
-        console.log(departmentNames);
-
-        inquirer.prompt([
-            { name: 'department', type: 'list', choices: departmentNames, message: "Which department would you like to update?" },
-            { name: 'newDepartment', type: 'input', message: "What is the new department name?" }
-        ])
+        console.log(employees);
+        
+        const employeeNames = employees.map(({ first_name, last_name }) => `${first_name} ${last_name}`);
+        console.log(employeeNames);
+        
+        db.query("SELECT * FROM role", (err, roles) => {
+            if (err) throw err;
+            console.log(roles);
+            
+            const roleTitles = roles.map(({ title }) => title);
+            console.log(roleTitles);
+            
+            inquirer.prompt([
+                { name: 'employee', type: 'list', choices: employeeNames, message: "Which employee's role would you like to update?" },
+                { name: 'role', type: 'list', choices: roleTitles, message: "Select the new role:" }
+            ])
             .then(answer => {
-
                 console.log(answer);
-                const departmentId = res.filter(d => d.name === answer.department)[0].id;
-
-                db.query(`UPDATE department SET name = '${answer.newDepartment}' WHERE id = ${departmentId}`,
-                    (err, res) => {
-                        if (err) throw err;
-                        viewAllDepartments();
-                        start();
-                    })
+                const employeeId = employees.filter(emp => `${emp.first_name} ${emp.last_name}` === answer.employee)[0].id;
+                const roleId = roles.filter(role => role.title === answer.role)[0].id;
+                
+                db.query(`UPDATE employee SET role_id = ${roleId} WHERE id = ${employeeId}`, (err, res) => {
+                    if (err) throw err;
+                    console.log("Employee role updated successfully!");
+                    viewAllEmployees();
+                    start();
+                });
             });
-    })
+        });
+    });
 }
 
+// 
 
 
 start();
+
+// function updateDepartment() {
+    //     db.query("SELECT * FROM department", (err, res) => {
+    //         if (err) throw err;
+    //         console.log(res);
+    //         //const departments = res.map(({ id, name }) => ({ name: name, value: id }));
+    //         //console.log(departments);
+    
+    //         const departmentNames = res.map(({ name }) => name);
+    //         console.log(departmentNames);
+    
+    //         inquirer.prompt([
+    //             { name: 'department', type: 'list', choices: departmentNames, message: "Which department would you like to update?" },
+    //             { name: 'newDepartment', type: 'input', message: "What is the new department name?" }
+    //         ])
+    //             .then(answer => {
+    
+    //                 console.log(answer);
+    //                 const departmentId = res.filter(d => d.name === answer.department)[0].id;
+    
+    //                 db.query(`UPDATE department SET name = '${answer.newDepartment}' WHERE id = ${departmentId}`,
+    //                     (err, res) => {
+    //                         if (err) throw err;
+    //                         viewAllDepartments();
+    //                         start();
+    //                     })
+    //             });
+    //     })
+    // }
+    
