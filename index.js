@@ -28,7 +28,7 @@ function start() {
                     viewAllRoles()
                     break;
                 case "View all employees":
-                    viewEmployees()
+                    viewAllEmployees()
                     break;
                 case "Add a department":
                     addDepartment();
@@ -65,8 +65,8 @@ function viewAllRoles() {
     });
 }
 
-function viewEmployees() {
-    db.query("SELECT employee.id as id, employee.first_name as first_name, employee.last_name as last_name, employee.role_id as role_id, employee.manager_id as manager_id, role.salary FROM employee INNER JOIN role ON employee.role_id = role.id", (err, data) => {
+function viewAllEmployees() {
+    db.query("SELECT employee.id as id, employee.first_name as first_name, employee.last_name as last_name, employee.role_id as role_id, role.title, employee.manager_id as manager_id, role.salary FROM employee INNER JOIN role ON employee.role_id = role.id", (err, data) => {
         //if (err) throw err;
         console.table(data);
         start();
