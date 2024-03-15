@@ -113,21 +113,26 @@ function addRoleToDB(departmentId) {
     inquirer.prompt([
         { name: 'roleTitle', type: 'input', message: "What is the title of the new role?" },
         { name: 'roleSalary', type: 'input', message: "What is the salary of the new role?" },
-        //{ name: 'departmentId', type: 'input', message: "What is the id of the department of the role?" },
-    ])
-        .then(answer => {
-            console.log(answer);
-            console.log("departmentId", departmentId)
-            //const departmentId = getDepartmentId();
-            //INSERT INTO role (title, salary, department_id) VALUES ('Sales Lead', 100000, 1),
-            db.query(`INSERT INTO role (title, salary, department_id) VALUES ('${answer.roleTitle}', ${answer.roleSalary}, ${departmentId});`,
-                (err, res) => {
-                    if (err) throw err;
-                    viewAllRoles();
-                    start();
-                })
-})
+    ]).then(answer => {
+        console.log(answer);
+        console.log("departmentId", departmentId);
+
+        // Use parameterized query
+        db.query(
+            'INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)',
+            [answer.roleTitle, answer.roleSalary, departmentId],
+            (err, res) => {
+                if (err) {
+                    console.error('Error inserting role:', err);
+                    return;
+                }
+                viewAllRoles();
+                start();
+            }
+        );
+    });
 }
+
 
 
 function addEmployee() {
@@ -151,16 +156,22 @@ function addEmployee() {
 }
 
 function addEmployeeToDB(firstName, lastName, roleId, managerId) {
-    db.query(`INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${firstName}', '${lastName}', ${roleId}, ${managerId || null});`,
+    // Use parameterized query
+    db.query(
+        'INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)',
+        [firstName, lastName, roleId, managerId || null],
         (err, res) => {
-            if (err) throw err;
+            if (err) {
+                console.error('Error adding employee:', err);
+                return;
+            }
             console.log("Employee added successfully!");
             viewAllEmployees();
             start();
-        });
-
-
+        }
+    );
 }
+
 
 
 function updateEmployeeRole() {
