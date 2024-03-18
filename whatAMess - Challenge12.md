@@ -2,10 +2,12 @@
 # whatAMess - Challenge12
 
 ![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)
-![Project Image](https://www.google.com/url?sa=i&url=https%3A%2F%2F1000logos.net%2Fmysql-logo%2F&psig=AOvVaw0Ej0URJZSNKO3dUbeHmwMU&ust=1710627812091000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCMjPuKqn94QDFQAAAAAdAAAAABAE)
+![Project Image](https://www.youtube.com/watch?v=Q0aZPVbVpb8)
 
 ## Description
 Build a command-line application from scratch to manage a company's employee database, using Node.js, Inquirer, and MySQL. AS A business owner, I WANT to be able to view and manage the departments, roles, and employees in my company, SO THAT I can organize and plan my business.
+
+[![Video](https://pbs.twimg.com/profile_images/1255113654049128448/J5Yt92WW_400x400.png)](https://youtu.be/Q0aZPVbVpb8)
 
 ## Table of Contents
 - [Installation](#installation)
