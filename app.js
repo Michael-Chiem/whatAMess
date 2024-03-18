@@ -1,5 +1,5 @@
 const express = require('express');
-const db = require('./connection'); // Assuming this file exports your database connection
+const db = require('./config/connection'); // Assuming this file exports your database connection
 
 const app = express();
 const port = 3000; // You can use any port you prefer
